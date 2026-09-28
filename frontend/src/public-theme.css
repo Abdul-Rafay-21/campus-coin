@@ -1,0 +1,200 @@
+/* Public website controls and complete light palette. Image overlays and the
+   dashboard preview stay dark; reading surfaces keep accessible contrast. */
+.public-theme-toggle {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  padding: 0;
+  border-radius: 12px;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 42px;
+}
+.public-theme-toggle svg { display: block; }
+
+:root[data-theme="light"] .public-shell {
+  background: #f7fbf5;
+  color: #17382f;
+}
+:root[data-theme="light"] .public-shell .public-nav {
+  background: #f7fbf5;
+  border-bottom: 1px solid #dce8dc;
+}
+:root[data-theme="light"] .public-shell .public-actions { gap: 14px; }
+:root[data-theme="light"] .public-shell .link-login { color: #254b3c; }
+:root[data-theme="light"] .public-shell .finza-hero {
+  background:
+    radial-gradient(circle at 76% 37%, #ddf3df 0%, transparent 39%),
+    #f7fbf5;
+}
+:root[data-theme="light"] .public-shell .hero-copy h1,
+:root[data-theme="light"] .public-shell .section-intro h2,
+:root[data-theme="light"] .public-shell .story-copy h2,
+:root[data-theme="light"] .public-shell .center-intro h2,
+:root[data-theme="light"] .public-shell .public-heading h2,
+:root[data-theme="light"] .public-shell .home-faq-intro h2,
+:root[data-theme="light"] .public-shell .about-story-copy h2,
+:root[data-theme="light"] .public-shell .public-detail .detail-hero h1 {
+  color: #14382e;
+}
+:root[data-theme="light"] .public-shell .hero-copy > p,
+:root[data-theme="light"] .public-shell .section-intro > p,
+:root[data-theme="light"] .public-shell .story-copy > p,
+:root[data-theme="light"] .public-shell .center-intro > p,
+:root[data-theme="light"] .public-shell .public-heading > p,
+:root[data-theme="light"] .public-shell .home-faq-intro > p,
+:root[data-theme="light"] .public-shell .about-story-copy > p,
+:root[data-theme="light"] .public-shell .detail-hero > p { color: #61786b; }
+:root[data-theme="light"] .public-shell .hero-pill {
+  color: #286445;
+  background: #eaf7e9;
+  border-color: #c7dfc8;
+}
+:root[data-theme="light"] .public-shell .hero-proof strong,
+:root[data-theme="light"] .public-shell .story-points strong { color: #214638; }
+:root[data-theme="light"] .public-shell .hero-proof small,
+:root[data-theme="light"] .public-shell .story-points small { color: #688073; }
+:root[data-theme="light"] .public-shell .hero-foot {
+  color: #557063;
+  border-color: #d7e5d8;
+}
+
+:root[data-theme="light"] .public-shell .stat-band,
+:root[data-theme="light"] .public-shell .feature-card,
+:root[data-theme="light"] .public-shell .finza-step,
+:root[data-theme="light"] .public-shell .people-card,
+:root[data-theme="light"] .public-shell .spotlight-row,
+:root[data-theme="light"] .public-shell .home-routine-grid article,
+:root[data-theme="light"] .public-shell .monthly-loop-grid article,
+:root[data-theme="light"] .public-shell .audience-grid article,
+:root[data-theme="light"] .public-shell .home-trust-strip,
+:root[data-theme="light"] .public-shell .faq-list details,
+:root[data-theme="light"] .public-shell .faq-aside,
+:root[data-theme="light"] .public-shell .policy-card,
+:root[data-theme="light"] .public-shell .public-boundary,
+:root[data-theme="light"] .public-shell .feature-detail-band,
+:root[data-theme="light"] .public-shell .compare-wrap,
+:root[data-theme="light"] .public-shell .week-timeline article,
+:root[data-theme="light"] .public-shell .home-site-map,
+:root[data-theme="light"] .public-shell .info-card,
+:root[data-theme="light"] .public-shell .sitemap-card {
+  background: #fff;
+  border-color: #d7e5d8;
+  box-shadow: 0 14px 42px rgba(29, 70, 48, 0.055);
+}
+:root[data-theme="light"] .public-shell .home-routine-grid article:nth-child(2),
+:root[data-theme="light"] .public-shell .monthly-loop-grid article:nth-child(2),
+:root[data-theme="light"] .public-shell .audience-grid article:nth-child(2) {
+  background: #fffbec;
+  border-color: #e9dfb9;
+}
+:root[data-theme="light"] .public-shell .home-routine-grid article:nth-child(3),
+:root[data-theme="light"] .public-shell .monthly-loop-grid article:nth-child(3),
+:root[data-theme="light"] .public-shell .audience-grid article:nth-child(3) {
+  background: #f1f8fb;
+  border-color: #d1e3ea;
+}
+:root[data-theme="light"] .public-shell .home-routine-grid article:nth-child(4),
+:root[data-theme="light"] .public-shell .monthly-loop-grid article:nth-child(4) {
+  background: #fff3fa;
+  border-color: #ead4e2;
+}
+:root[data-theme="light"] .public-shell .stat-band > div,
+:root[data-theme="light"] .public-shell .compare-table th,
+:root[data-theme="light"] .public-shell .compare-table td,
+:root[data-theme="light"] .public-shell .policy-card section { border-color: #dfebe0; }
+:root[data-theme="light"] .public-shell .stat-band span,
+:root[data-theme="light"] .public-shell .feature-card h3,
+:root[data-theme="light"] .public-shell .finza-step h3,
+:root[data-theme="light"] .public-shell .people-card h3,
+:root[data-theme="light"] .public-shell .spotlight-copy h3,
+:root[data-theme="light"] .public-shell .home-routine-grid h3,
+:root[data-theme="light"] .public-shell .monthly-loop-grid h3,
+:root[data-theme="light"] .public-shell .audience-grid h3,
+:root[data-theme="light"] .public-shell .home-trust-strip strong,
+:root[data-theme="light"] .public-shell .faq-aside h2,
+:root[data-theme="light"] .public-shell .policy-card h2,
+:root[data-theme="light"] .public-shell .public-boundary h2,
+:root[data-theme="light"] .public-shell .feature-detail-band h2,
+:root[data-theme="light"] .public-shell .week-timeline h3,
+:root[data-theme="light"] .public-shell .home-site-map h2,
+:root[data-theme="light"] .public-shell .info-card h3,
+:root[data-theme="light"] .public-shell .sitemap-card h2 { color: #183d31; }
+:root[data-theme="light"] .public-shell .stat-band small,
+:root[data-theme="light"] .public-shell .feature-card p,
+:root[data-theme="light"] .public-shell .finza-step p,
+:root[data-theme="light"] .public-shell .people-card p,
+:root[data-theme="light"] .public-shell .spotlight-copy > p,
+:root[data-theme="light"] .public-shell .home-routine-grid p,
+:root[data-theme="light"] .public-shell .monthly-loop-grid p,
+:root[data-theme="light"] .public-shell .audience-grid p,
+:root[data-theme="light"] .public-shell .home-trust-strip span,
+:root[data-theme="light"] .public-shell .faq-aside p,
+:root[data-theme="light"] .public-shell .policy-card p,
+:root[data-theme="light"] .public-shell .public-boundary p,
+:root[data-theme="light"] .public-shell .feature-detail-band p,
+:root[data-theme="light"] .public-shell .week-timeline p,
+:root[data-theme="light"] .public-shell .home-site-map p,
+:root[data-theme="light"] .public-shell .info-card p { color: #63796d; }
+:root[data-theme="light"] .public-shell .spotlight-copy li,
+:root[data-theme="light"] .public-shell .how-step li,
+:root[data-theme="light"] .public-shell .boundary-points span,
+:root[data-theme="light"] .public-shell .feature-detail-band li,
+:root[data-theme="light"] .public-shell .week-entry,
+:root[data-theme="light"] .public-shell .faq-aside-links a { color: #35594a; }
+:root[data-theme="light"] .public-shell .faq-list summary { color: #193e32; }
+:root[data-theme="light"] .public-shell .faq-list details p {
+  color: #5f766a;
+  border-color: #dce8dd;
+}
+:root[data-theme="light"] .public-shell .faq-topics span,
+:root[data-theme="light"] .public-shell .faq-topics a,
+:root[data-theme="light"] .public-shell .policy-links a {
+  color: #3f6253;
+  background: #f1f7f1;
+  border-color: #d2e2d3;
+}
+:root[data-theme="light"] .public-shell .compare-table thead th {
+  color: #547064;
+  background: #edf5ee;
+}
+:root[data-theme="light"] .public-shell .compare-table td { color: #35594a; }
+:root[data-theme="light"] .public-shell .compare-table td.is-us { background: #e9f8e7; }
+:root[data-theme="light"] .public-shell .finza-story {
+  background: #eef6ee;
+  border-color: #d5e4d6;
+}
+:root[data-theme="light"] .public-shell .site-footer {
+  background: #edf5ed;
+  border-color: #d3e2d4;
+  color: #345649;
+}
+:root[data-theme="light"] .public-shell .site-footer .footer-rich h3,
+:root[data-theme="light"] .public-shell .site-footer .brand { color: #183d31; }
+:root[data-theme="light"] .public-shell .site-footer .footer-rich a,
+:root[data-theme="light"] .public-shell .site-footer .footer-rich p,
+:root[data-theme="light"] .public-shell .footer-bottom { color: #5e7669; }
+
+/* These dark visual islands retain their intended contrast in light mode. */
+:root[data-theme="light"] .public-shell .hero-preview,
+:root[data-theme="light"] .public-shell .photo-tile,
+:root[data-theme="light"] .public-shell .story-picture-label,
+:root[data-theme="light"] .public-shell .spotlight-chip,
+:root[data-theme="light"] .public-shell .photo-mosaic figcaption,
+:root[data-theme="light"] .public-shell .policy-banner span { color: #efffeb; }
+:root[data-theme="light"] .public-shell .hero-preview p,
+:root[data-theme="light"] .public-shell .hero-preview small,
+:root[data-theme="light"] .public-shell .photo-tile p,
+:root[data-theme="light"] .public-shell .story-picture-label small { color: #b7cdb2; }
+:root[data-theme="light"] .public-shell .hero-preview strong,
+:root[data-theme="light"] .public-shell .photo-tile h3,
+:root[data-theme="light"] .public-shell .story-picture-label strong { color: #f1ffed; }
+
+@media (max-width: 720px) {
+  .public-theme-toggle {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    flex-basis: 38px;
+  }
+}
