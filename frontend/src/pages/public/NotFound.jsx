@@ -6,7 +6,6 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
   ArrowUp,
-  BarChart3,
   ShieldCheck,
   Wallet,
   Target,

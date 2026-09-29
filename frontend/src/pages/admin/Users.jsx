@@ -1,9 +1,10 @@
 /** Admin Users administrator dashboard page and related management UI. */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
   Coins,
+  Download,
   Eye,
   LockKeyhole,
   Search,
@@ -12,7 +13,7 @@ import {
   TrendingDown,
   Wallet,
 } from "lucide-react";
-import { api, dateLabel, money } from "../../lib/api";
+import { api, dateLabel, downloadApi, money } from "../../lib/api";
 import {
   Card,
   Empty,
@@ -37,9 +38,40 @@ function SummaryCard({ icon: Icon, label, value, tone = "" }) {
   );
 }
 
-function StudentDetails({ state, onClose }) {
+function StudentDetails({ state, onClose, onDownload, downloading }) {
   const details = state.data;
   const currency = details?.user?.currency || "PKR";
+  const currentMonth = details?.reportPeriod?.month;
+  const currentYear = details?.reportPeriod?.year;
+  const [reportMonth, setReportMonth] = useState(null);
+  const [reportYear, setReportYear] = useState(null);
+  const selectedMonth = reportMonth ?? currentMonth ?? "";
+  const selectedYear = reportYear ?? currentYear ?? "";
+
+  useEffect(() => {
+    if (!currentMonth || !currentYear) return;
+    setReportYear((year) => year ?? currentYear);
+    setReportMonth((month) =>
+      month && month <= currentMonth ? month : currentMonth,
+    );
+  }, [currentMonth, currentYear]);
+
+  const availableMonthCount =
+    selectedYear === currentYear ? currentMonth : 12;
+  const availableYears = currentYear
+    ? Array.from(
+        { length: currentYear - 2019 },
+        (_, index) => currentYear - index,
+      )
+    : [];
+
+  function changeReportYear(value) {
+    const year = Number(value);
+    setReportYear(year);
+    if (year === currentYear && reportMonth > currentMonth) {
+      setReportMonth(currentMonth);
+    }
+  }
   return (
     <Modal
       wide
@@ -66,6 +98,51 @@ function StudentDetails({ state, onClose }) {
                 >
                   {details.user.status}
                 </Pill>
+              </div>
+              <div className="student-report-actions">
+                <label className="field">
+                  <span className="field-label">Report month</span>
+                  <select
+                    value={selectedMonth}
+                    onChange={(event) =>
+                      setReportMonth(Number(event.target.value))
+                    }
+                  >
+                    {Array.from(
+                      { length: availableMonthCount || 0 },
+                      (_, index) => (
+                        <option key={index + 1} value={index + 1}>
+                          {new Date(2000, index).toLocaleString("en", {
+                            month: "long",
+                          })}
+                        </option>
+                      ),
+                    )}
+                  </select>
+                </label>
+                <label className="field">
+                  <span className="field-label">Report year</span>
+                  <select
+                    value={selectedYear}
+                    onChange={(event) => changeReportYear(event.target.value)}
+                  >
+                    {availableYears.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <button
+                  className="button button-primary"
+                  disabled={downloading || !selectedMonth || !selectedYear}
+                  onClick={() =>
+                    onDownload(details.user, selectedMonth, selectedYear)
+                  }
+                >
+                  <Download size={16} />
+                  {downloading ? "Downloading..." : "Download CSV report"}
+                </button>
               </div>
               <div className="student-detail-meta">
                 <span>
@@ -260,6 +337,7 @@ export function UsersPage() {
   const [page, setPage] = useState(1);
   const [preview, setPreview] = useState(null);
   const [details, setDetails] = useState(null);
+  const [downloading, setDownloading] = useState(false);
   const load = useLoad(
     () => api(`/admin/users?page=${page}&search=${encodeURIComponent(search)}`),
     [page, search],
@@ -293,6 +371,26 @@ export function UsersPage() {
       toast("Account status updated.");
     } catch (error) {
       toast(error.message, "error");
+    }
+  }
+
+  async function downloadReport(user, month, year) {
+    setDownloading(true);
+    try {
+      const safeName = user.name
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "") || "student";
+      await downloadApi(
+        `/admin/users/${user._id}/report.csv?month=${month}&year=${year}`,
+        `campus-coin-${safeName}-${year}-${month}.csv`,
+      );
+      toast(`Downloaded ${user.name}'s report.`);
+    } catch (error) {
+      toast(error.message, "error");
+    } finally {
+      setDownloading(false);
     }
   }
 
@@ -456,7 +554,12 @@ export function UsersPage() {
         )}
       </Card>
       {details && (
-        <StudentDetails state={details} onClose={() => setDetails(null)} />
+        <StudentDetails
+          state={details}
+          onClose={() => setDetails(null)}
+          onDownload={downloadReport}
+          downloading={downloading}
+        />
       )}
       {preview && (
         <Modal

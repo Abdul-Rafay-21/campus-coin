@@ -14,11 +14,19 @@ import {
   CSVImport,
 } from "../../models/models.js";
 
-import { route, AppError, escapeRegex } from "../../helpers/utils.js";
+import {
+  route,
+  AppError,
+  escapeRegex,
+  currentPeriod,
+} from "../../helpers/utils.js";
 
 import { sendReset } from "../auth/routes.js";
 
 import { log } from "./activityLog.js";
+import { selectedPeriod } from "../finance/helpers.js";
+import { reportTransactions } from "../../services/finance.js";
+import { createReportCsv } from "../../services/reportCsv.js";
 
 const router = Router();
 
@@ -91,6 +99,39 @@ router.get(
     );
   }
   ),
+);
+
+router.get(
+  "/users/:id/report.csv",
+  route(async (req, res) => {
+    const student = await User.findOne({
+      _id: req.params.id,
+      role: "student",
+    }).select("name email currency");
+
+    if (!student) throw new AppError(404, "Student not found.");
+
+    const selected = selectedPeriod(req);
+    const rows = await reportTransactions(
+      student._id,
+      selected.month,
+      selected.year,
+      {},
+    );
+    const safeName = student.name
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || "student";
+
+    await log(req, "user.report-export", student._id);
+    res.set({
+      "Content-Type": "text/csv; charset=utf-8",
+      "Content-Disposition": `attachment; filename="campus-coin-${safeName}-${selected.year}-${selected.month}.csv"`,
+      "Cache-Control": "private, no-store",
+    });
+    res.send(createReportCsv(student, rows));
+  }),
 );
 
 
@@ -243,6 +284,7 @@ router.get(
       categoryUsage,
       recentTransactions,
       budgets,
+      reportPeriod: currentPeriod(),
     }
     );
   }

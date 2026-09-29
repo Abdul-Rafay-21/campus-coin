@@ -4266,6 +4266,27 @@ textarea:focus-visible {
 .admin-student-detail {
   padding: 22px 26px 28px;
 }
+.student-report-actions {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) minmax(120px, 0.7fr) auto;
+  align-items: end;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--soft);
+}
+
+.student-report-actions .button {
+  min-height: 44px;
+}
+
+@media (max-width: 680px) {
+  .student-report-actions {
+    grid-template-columns: 1fr;
+  }
+}
 .student-detail-head {
   display: flex;
   align-items: center;

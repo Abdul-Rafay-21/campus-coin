@@ -15,7 +15,6 @@ import {
   MessagesSquare,
   Activity,
   NotebookPen,
-  BarChart3,
   ArrowRight,
   CalendarDays,
   RefreshCcw,

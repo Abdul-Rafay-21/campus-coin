@@ -8,7 +8,7 @@ const recentRequests = new Map();
 function localReply(message) {
   const question = message.toLowerCase();
   if (/^(hi|hello|hey|salam|assalam|aoa)\b/.test(question)) {
-    return "Hi! I can help with Campus Coin, recipes, study questions, sports rules and other everyday topics. What would you like to know?";
+    return "Hi! I can help with Campus Coin. What would you like to know?";
   }
   if (/budget|income|expense|transaction|report|campus coin/.test(question)) {
     return "Campus Coin lets students record income first, add expenses within their available income, set date-based budgets, view reports, and get saving tips. Sign in and use the left menu to open the feature you need.";
@@ -69,7 +69,7 @@ router.post(
     recent.push(now);
     recentRequests.set(key, recent);
 
-    if (!process.env.OPENAI_API_KEY) {
+    if (!process.env.GEMINI_API_KEY) {
       return res.json({
         reply: localReply(message),
         mode: "local",
@@ -79,27 +79,37 @@ router.post(
 
     let response;
     try {
-      response = await fetch("https://api.openai.com/v1/responses", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          "Content-Type": "application/json",
+      const model = process.env.GEMINI_MODEL || "gemini-3.6-flash";
+      response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+        {
+          method: "POST",
+          headers: {
+            "x-goog-api-key": process.env.GEMINI_API_KEY,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            systemInstruction: {
+              parts: [
+                {
+                  text: "You are the friendly public Campus Coin website assistant. Answer questions about the website and general topics such as recipes, study, and sports. Be concise and useful. Do not claim access to private user financial data or live information unless it was provided. For medical, legal, or financial decisions, give cautious general information and recommend a qualified professional.",
+                },
+              ],
+            },
+            contents: [
+              ...history.map((item) => ({
+                role: item.role === "assistant" ? "model" : "user",
+                parts: [{ text: item.content }],
+              })),
+              { role: "user", parts: [{ text: message }] },
+            ],
+            generationConfig: {
+              maxOutputTokens: 450,
+            },
+          }),
+          signal: AbortSignal.timeout(20_000),
         },
-        body: JSON.stringify({
-          model: process.env.OPENAI_CHAT_MODEL || "gpt-4.1-mini",
-          instructions:
-            "You are the friendly public Campus Coin website assistant. Answer questions about the website and general topics such as recipes, study, and sports. Be concise and useful. Do not claim access to private user financial data or live information unless it was provided. For medical, legal, or financial decisions, give cautious general information and recommend a qualified professional.",
-          input: [
-            ...history.map((item) => ({
-              role: item.role,
-              content: item.content,
-            })),
-            { role: "user", content: message },
-          ],
-          max_output_tokens: 450,
-        }),
-        signal: AbortSignal.timeout(20_000),
-      });
+      );
     } catch {
       return res.json({
         reply: localReply(message),
@@ -111,7 +121,7 @@ router.post(
       const failure = await response.json().catch(() => ({}));
       console.error(
         `Public chat provider error (${response.status}):`,
-        failure?.error?.message || "Unknown provider error",
+        failure?.error?.message || "Unknown Gemini API error",
       );
       return res.json({
         reply: localReply(message),
@@ -120,10 +130,9 @@ router.post(
       });
     }
     const data = await response.json();
-    const reply = (data.output || [])
-      .flatMap((item) => item.content || [])
-      .filter((item) => item.type === "output_text")
-      .map((item) => item.text)
+    const reply = (data.candidates || [])
+      .flatMap((candidate) => candidate.content?.parts || [])
+      .map((part) => part.text || "")
       .join("\n")
       .trim();
     res.json({

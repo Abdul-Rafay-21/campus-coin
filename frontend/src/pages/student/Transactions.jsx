@@ -64,7 +64,6 @@ import {
   useConfirm,
   ErrorNotice,
 } from "../../components/UIComponents";
-import { TrendChart, CategoryChart, DailyChart } from "../../components/Charts";
 import {
   isValidTransactionRow,
   formatMoney,

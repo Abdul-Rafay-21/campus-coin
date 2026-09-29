@@ -15,7 +15,6 @@ import {
   MessagesSquare,
   Activity,
   NotebookPen,
-  BarChart3,
   ArrowRight,
   CalendarDays,
   RefreshCcw,
@@ -54,7 +53,6 @@ export function ActivityPage() {
                   <tr>
                     <th>Action</th>
                     <th>Administrator</th>
-                    <th>Target</th>
                     <th>Date</th>
                   </tr>
                 </thead>
@@ -65,9 +63,6 @@ export function ActivityPage() {
                         <Pill>{l.action}</Pill>
                       </td>
                       <td>{l.adminId?.name || "Administrator"}</td>
-                      <td>
-                        <small>{l.targetId || "--"}</small>
-                      </td>
                       <td>{dateLabel(l.createdAt)}</td>
                     </tr>
                   ))}
